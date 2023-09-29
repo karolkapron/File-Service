@@ -12,8 +12,9 @@ import java.util.List;
 @RequestMapping("/files")
 public class FileController {
 
-    private FileService fileService;
     @Autowired
+    private FileService fileService;
+
     public FileController(FileService fileService){
         this.fileService = fileService;
     }

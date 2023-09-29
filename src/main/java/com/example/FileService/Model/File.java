@@ -12,9 +12,6 @@ public class File {
     private Long sizeInByte;
     private String folder; //in the future using Folder entity
 
-    File(){
-
-    }
     public Long getId() {
         return id;
     }
