@@ -11,8 +11,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/files")
 public class FileController {
+
+    private FileService fileService;
     @Autowired
-    FileService fileService;
+    public FileController(FileService fileService){
+        this.fileService = fileService;
+    }
 
     @GetMapping
     public List<File> getAllFiles(){
@@ -24,7 +28,7 @@ public class FileController {
                 .map(file -> ResponseEntity.ok(file))
                 .orElse(ResponseEntity.notFound().build());
     }
-    @PostMapping("/{filename}")
+    @PostMapping
     public ResponseEntity<File> addNewFile(@RequestBody File newFile){
         return ResponseEntity.ok(fileService.saveFile(newFile));
     }
