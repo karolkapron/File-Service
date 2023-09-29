@@ -1,7 +1,7 @@
-package com.example.FileService.Service;
+package com.example.FileService.service;
 
-import com.example.FileService.Model.File;
-import com.example.FileService.Repository.FileRepository;
+import com.example.FileService.model.File;
+import com.example.FileService.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

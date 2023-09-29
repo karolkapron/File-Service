@@ -1,4 +1,4 @@
-package com.example.FileService.Model;
+package com.example.FileService.model;
 
 import jakarta.persistence.*;
 

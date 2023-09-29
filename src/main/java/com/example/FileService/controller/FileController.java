@@ -1,12 +1,16 @@
-package com.example.FileService.Controller;
+package com.example.FileService.controller;
 
-import com.example.FileService.Model.File;
-import com.example.FileService.Service.FileService;
+import com.example.FileService.model.File;
+import com.example.FileService.model.dto.FileDto;
+import com.example.FileService.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.FileService.controller.mapper.*;
 import java.util.List;
+
+import static com.example.FileService.controller.mapper.FileDtoMapper.mapFilesToFileDto;
+
 
 @RestController
 @RequestMapping("/files")
@@ -20,9 +24,11 @@ public class FileController {
     }
 
     @GetMapping
-    public List<File> getAllFiles(){
-        return fileService.getAllFiles();
+    public List<FileDto> getAllFiles(){
+        return mapFilesToFileDto(fileService.getAllFiles());
     }
+
+
     @GetMapping("/{filename}")
     public ResponseEntity<File> getFileByFilename(@PathVariable String filename){
         return fileService.getFileByFilename(filename)
@@ -30,16 +36,20 @@ public class FileController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping
-    public ResponseEntity<File> addNewFile(@RequestBody File newFile){
-        return ResponseEntity.ok(fileService.saveFile(newFile));
+    public ResponseEntity<File> addNewFile(@RequestBody FileDto newFile){
+        File file = new File();
+        file.setFilename(newFile.filename());
+        file.setSizeInByte(newFile.sizeInByte());
+        file.setFolder(newFile.folder());
+        return ResponseEntity.ok(fileService.saveFile(file));
     }
     @PutMapping("/{filename}")
-    public ResponseEntity<File> updateFile(@PathVariable String filename, @RequestBody File fileToUpdate){
+    public ResponseEntity<File> updateFile(@PathVariable String filename, @RequestBody FileDto fileToUpdate){
         return fileService.getFileByFilename(filename)
                 .map(existingFile -> {
-                    existingFile.setFilename(fileToUpdate.getFilename());
-                    existingFile.setFolder(fileToUpdate.getFolder());
-                    existingFile.setSizeInByte(fileToUpdate.getSizeInByte());
+                    existingFile.setFilename(fileToUpdate.filename());
+                    existingFile.setFolder(fileToUpdate.folder());
+                    existingFile.setSizeInByte(fileToUpdate.sizeInByte());
                     return ResponseEntity.ok(fileService.saveFile(existingFile));
 
                 }).orElse(ResponseEntity.notFound().build());

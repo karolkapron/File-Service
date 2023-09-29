@@ -1,6 +1,6 @@
-package com.example.FileService.Repository;
+package com.example.FileService.repository;
 
-import com.example.FileService.Model.File;
+import com.example.FileService.model.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
