@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.FileService.controller.mapper.*;
 import java.util.List;
 
-import static com.example.FileService.controller.mapper.FileDtoMapper.mapFilesToFileDto;
+import static com.example.FileService.controller.mapper.FileDtoMapper.mapFilesToFilesDto;
 
 
 @RestController
@@ -25,7 +25,7 @@ public class FileController {
 
     @GetMapping
     public List<FileDto> getAllFiles(){
-        return mapFilesToFileDto(fileService.getAllFiles());
+        return mapFilesToFilesDto(fileService.getAllFiles());
     }
 
 
@@ -36,12 +36,12 @@ public class FileController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping
-    public ResponseEntity<File> addNewFile(@RequestBody FileDto newFile){
+    public void addNewFile(@RequestBody FileDto newFile){
         File file = new File();
         file.setFilename(newFile.filename());
         file.setSizeInByte(newFile.sizeInByte());
         file.setFolder(newFile.folder());
-        return ResponseEntity.ok(fileService.saveFile(file));
+        fileService.saveFile(file);
     }
     @PutMapping("/{filename}")
     public ResponseEntity<File> updateFile(@PathVariable String filename, @RequestBody FileDto fileToUpdate){
