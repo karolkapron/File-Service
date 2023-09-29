@@ -36,12 +36,8 @@ public class FileController {
                 .orElse(ResponseEntity.notFound().build());
     }
     @PostMapping
-    public void addNewFile(@RequestBody FileDto newFile){
-        File file = new File();
-        file.setFilename(newFile.filename());
-        file.setSizeInByte(newFile.sizeInByte());
-        file.setFolder(newFile.folder());
-        fileService.saveFile(file);
+    public void addNewFile(@RequestBody File newFile){
+        fileService.saveFile(newFile);
     }
     @PutMapping("/{filename}")
     public ResponseEntity<File> updateFile(@PathVariable String filename, @RequestBody FileDto fileToUpdate){

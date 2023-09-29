@@ -12,4 +12,7 @@ public class FileDtoMapper {
                 .map(file -> new FileDto(file.getFilename(), file.getSizeInByte(), file.getFolder()))
                 .toList();
     }
+    public static FileDto mapFileToDto(File file){
+        return new FileDto(file.getFilename(), file.getSizeInByte(), file.getFolder());
+    }
 }
