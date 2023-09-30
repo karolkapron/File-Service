@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class FileDtoMapper {
     public static List<FileDto> mapFilesToFilesDto(List<File> files){
         return files.stream()
-                .map(file -> new FileDto(file.getFilename(), file.getSizeInByte(), file.getFolder()))
+                .map(FileDtoMapper::mapFileToDto)
                 .toList();
     }
     public static FileDto mapFileToDto(File file){

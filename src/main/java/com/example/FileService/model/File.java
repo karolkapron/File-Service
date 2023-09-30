@@ -2,6 +2,9 @@ package com.example.FileService.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class File {
     @Id
@@ -10,12 +13,13 @@ public class File {
     @Column(unique = true)
     private String filename;
     private Long sizeInByte;
-    private String folder; //in the future using Folder entity
 
-    public File(String filename, Long sizeInByte, String folder){
+    private String folders;
+
+    public File(String filename, Long sizeInByte, String folders){
         this.filename = filename;
         this.sizeInByte = sizeInByte;
-        this.folder = folder;
+        this.folders = folders;
     }
     File(){}
 
@@ -44,10 +48,10 @@ public class File {
     }
 
     public String getFolder() {
-        return folder;
+        return folders;
     }
 
-    public void setFolder(String folder) {
-        this.folder = folder;
+    public void setFolder(String folders) {
+        this.folders = folders;
     }
 }
