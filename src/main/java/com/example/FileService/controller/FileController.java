@@ -22,7 +22,7 @@ public class FileController {
 
     @GetMapping
     public List<FileDto> getAllFiles(){
-        return fileService.getAllFilesDtos();
+        return fileService.getAllFilesDto();
     }
 
     @GetMapping("/{filename}")

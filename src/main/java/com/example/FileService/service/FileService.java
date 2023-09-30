@@ -17,7 +17,7 @@ public class FileService {
     @Autowired
     private FileRepository fileRepository;
 
-    public List<FileDto> getAllFilesDtos(){
+    public List<FileDto> getAllFilesDto(){
         List<File> files = fileRepository.findAll();
         return mapFilesToFilesDto(files);
     }
