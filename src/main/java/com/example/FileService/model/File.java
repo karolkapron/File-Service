@@ -14,9 +14,13 @@ public class File {
     private String filename;
     private Long sizeInByte;
 
-    private String folders;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "file_folder",
+            joinColumns = @JoinColumn(name = "file_id"),
+            inverseJoinColumns = @JoinColumn(name = "folder_id"))
+    private Set<Folder> folders = new HashSet<>();
 
-    public File(String filename, Long sizeInByte, String folders){
+    public File(String filename, Long sizeInByte, Set<Folder> folders){
         this.filename = filename;
         this.sizeInByte = sizeInByte;
         this.folders = folders;
@@ -47,11 +51,11 @@ public class File {
         this.sizeInByte = sizeInByte;
     }
 
-    public String getFolder() {
+    public Set<Folder> getFolder() {
         return folders;
     }
 
-    public void setFolder(String folders) {
+    public void setFolder(Set<Folder> folders) {
         this.folders = folders;
     }
 }
