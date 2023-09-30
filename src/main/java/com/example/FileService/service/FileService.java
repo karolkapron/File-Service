@@ -48,7 +48,7 @@ public class FileService {
         return fileRepository.findByFilename(filename)
                 .map(existingFile -> {
                     fileRepository.delete(existingFile);
-                    return ResponseEntity.noContent().build();
+                    return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 }
