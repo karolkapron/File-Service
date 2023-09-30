@@ -1,23 +1,20 @@
 package com.example.FileService.controller;
 
-import com.example.FileService.model.File;
 import com.example.FileService.model.dto.FileDto;
 import com.example.FileService.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.FileService.controller.mapper.*;
+
 import java.util.List;
-
-import static com.example.FileService.controller.mapper.FileDtoMapper.mapFilesToFilesDto;
-
 
 @RestController
 @RequestMapping("/files")
 public class FileController {
 
     @Autowired
-    private FileService fileService;
+    private final FileService fileService;
+
 
     public FileController(FileService fileService){
         this.fileService = fileService;
@@ -25,37 +22,26 @@ public class FileController {
 
     @GetMapping
     public List<FileDto> getAllFiles(){
-        return mapFilesToFilesDto(fileService.getAllFiles());
+        return fileService.getAllFilesDtos();
     }
-
 
     @GetMapping("/{filename}")
-    public ResponseEntity<File> getFileByFilename(@PathVariable String filename){
-        return fileService.getFileByFilename(filename)
-                .map(file -> ResponseEntity.ok(file))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<FileDto> getFileByFilename(@PathVariable String filename){
+        return fileService.getFileDtoByFilename(filename);
     }
-    @PostMapping
-    public void addNewFile(@RequestBody File newFile){
-        fileService.saveFile(newFile);
-    }
-    @PutMapping("/{filename}")
-    public ResponseEntity<File> updateFile(@PathVariable String filename, @RequestBody FileDto fileToUpdate){
-        return fileService.getFileByFilename(filename)
-                .map(existingFile -> {
-                    existingFile.setFilename(fileToUpdate.filename());
-                    existingFile.setFolder(fileToUpdate.folder());
-                    existingFile.setSizeInByte(fileToUpdate.sizeInByte());
-                    return ResponseEntity.ok(fileService.saveFile(existingFile));
 
-                }).orElse(ResponseEntity.notFound().build());
+    @PostMapping
+    public void addNewFile(@RequestBody FileDto newFileDto){
+        fileService.saveFileFromDto(newFileDto);
     }
+
+    @PutMapping("/{filename}")
+    public ResponseEntity<FileDto> updateFile(@PathVariable String filename, @RequestBody FileDto fileToUpdate){
+        return fileService.updateFileDtoByFilename(filename, fileToUpdate);
+    }
+
     @DeleteMapping("/{filename}")
     public ResponseEntity<Object> deleteFile(@PathVariable String filename){
-        return fileService.getFileByFilename(filename)
-                .map(existingFile->{
-                    fileService.deleteFile(existingFile.getId());
-                    return ResponseEntity.noContent().build();
-                }).orElse(ResponseEntity.notFound().build());
+        return fileService.deleteFileByFilename(filename);
     }
 }

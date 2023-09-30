@@ -12,6 +12,13 @@ public class File {
     private Long sizeInByte;
     private String folder; //in the future using Folder entity
 
+    public File(String filename, Long sizeInByte, String folder){
+        this.filename = filename;
+        this.sizeInByte = sizeInByte;
+        this.folder = folder;
+    }
+    File(){}
+
     public Long getId() {
         return id;
     }
