@@ -4,7 +4,6 @@ import com.example.FileService.model.File;
 import com.example.FileService.model.dto.FileDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileDtoMapper {
     public static List<FileDto> mapFilesToFilesDto(List<File> files){
@@ -13,9 +12,9 @@ public class FileDtoMapper {
                 .toList();
     }
     public static FileDto mapFileToDto(File file){
-        return new FileDto(file.getFilename(), file.getSizeInByte(), file.getFolder());
+        return new FileDto(file.getFilename(), file.getSize(), file.getFolder());
     }
     public static File mapDtoToFile(FileDto fileDto){
-        return new File(fileDto.filename(), fileDto.sizeInByte(), fileDto.folder());
+        return new File(fileDto.filename(), fileDto.size(), fileDto.folder());
     }
 }

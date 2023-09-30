@@ -1,7 +1,7 @@
 package com.example.FileService.service;
 
 import com.example.FileService.model.File;
-import com.example.FileService.model.dto.FileDto;
+import com.example.FileService.model.Folder;
 import com.example.FileService.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,46 +9,36 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.FileService.controller.mapper.FileDtoMapper.*;
-
 @Service
 public class FileService {
-
     @Autowired
-    private FileRepository fileRepository;
+    private final FileRepository fileRepository;
 
-    public List<FileDto> getAllFilesDto(){
-        List<File> files = fileRepository.findAll();
-        return mapFilesToFilesDto(files);
+    public FileService(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
     }
 
-    public ResponseEntity<FileDto> getFileDtoByFilename(String filename){
+    public List<File> getAllFilesDto(){
+        return fileRepository.findAll();
+    }
+
+
+public File saveFileWithFolder(File file, Folder folder) {
+    if (folder.getName() != null && !folder.getName().isEmpty() && !file.getFolder().contains(folder)) {
+        file.getFolder().add(folder);
+    }
+    return fileRepository.save(file);
+}
+
+    public ResponseEntity<File> findByFilename(String filename) {
         return fileRepository.findByFilename(filename)
-                .map(file -> ResponseEntity.ok(mapFileToDto(file)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    public void saveFileFromDto(FileDto fileDto){
-        File file = mapDtoToFile(fileDto);
-        fileRepository.save(file);
+    public ResponseEntity<?> deleteByFilename(String filename) {
+        fileRepository.deleteByFilename(filename);
+        return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<FileDto> updateFileDtoByFilename(String filename, FileDto fileToUpdate){
-        return fileRepository.findByFilename(filename)
-                .map(existingFile -> {
-                    existingFile.setFilename(fileToUpdate.filename());
-                    existingFile.setFolder(fileToUpdate.folder());
-                    existingFile.setSizeInByte(fileToUpdate.sizeInByte());
-                    fileRepository.save(existingFile);
-                    return ResponseEntity.ok(mapFileToDto(existingFile));
-                }).orElse(ResponseEntity.notFound().build());
-    }
-
-    public ResponseEntity<Object> deleteFileByFilename(String filename){
-        return fileRepository.findByFilename(filename)
-                .map(existingFile -> {
-                    fileRepository.delete(existingFile);
-                    return ResponseEntity.ok().build();
-                }).orElse(ResponseEntity.notFound().build());
-    }
 }

@@ -2,7 +2,9 @@ package com.example.FileService.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,17 +14,14 @@ public class File {
     private Long id;
     @Column(unique = true)
     private String filename;
-    private Long sizeInByte;
+    private Long size;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "file_folder",
-            joinColumns = @JoinColumn(name = "file_id"),
-            inverseJoinColumns = @JoinColumn(name = "folder_id"))
-    private Set<Folder> folders = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private List<Folder> folders = new ArrayList<>();
 
-    public File(String filename, Long sizeInByte, Set<Folder> folders){
+    public File(String filename, Long sizeInByte, List<Folder> folders){
         this.filename = filename;
-        this.sizeInByte = sizeInByte;
+        this.size = sizeInByte;
         this.folders = folders;
     }
     File(){}
@@ -43,19 +42,18 @@ public class File {
         this.filename = filename;
     }
 
-    public Long getSizeInByte() {
-        return sizeInByte;
+    public Long getSize() {
+        return size;
     }
 
-    public void setSizeInByte(Long sizeInByte) {
-        this.sizeInByte = sizeInByte;
+    public void setSize(Long size) {
+        this.size = size;
     }
 
-    public Set<Folder> getFolder() {
+    public List<Folder> getFolder() {
         return folders;
     }
-
-    public void setFolder(Set<Folder> folders) {
+    public void setFolder(List<Folder> folders) {
         this.folders = folders;
     }
 }

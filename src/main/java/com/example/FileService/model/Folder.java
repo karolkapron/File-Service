@@ -2,9 +2,7 @@ package com.example.FileService.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,15 +10,34 @@ public class Folder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-    private String folderName;
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Folder parentFolder;
+    private String name;
 
-    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Folder> subFolders = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Folder> subFolders = new HashSet<>();
 
-    @ManyToMany(mappedBy = "folders")
-    private Set<File> files = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public Set<Folder> getSubFolders() {
+        return subFolders;
+    }
+    public void setSubFolders(Set<Folder> subFolders) {
+        this.subFolders = subFolders;
+    }
+
 }
