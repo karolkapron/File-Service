@@ -38,7 +38,7 @@ public class FileService {
                 .map(existingFile -> {
                     existingFile.setFilename(fileToUpdate.filename());
                     existingFile.setFolder(fileToUpdate.folder());
-                    existingFile.setSizeInByte(fileToUpdate.sizeInByte());
+                    existingFile.setSize(fileToUpdate.size());
                     fileRepository.save(existingFile);
                     return ResponseEntity.ok(mapFileToDto(existingFile));
                 }).orElse(ResponseEntity.notFound().build());
