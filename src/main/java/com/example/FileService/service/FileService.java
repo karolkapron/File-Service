@@ -36,9 +36,9 @@ public class FileService {
     public ResponseEntity<FileDto> updateFileDtoByFilename(String filename, FileDto fileToUpdate){
         return fileRepository.findByFilename(filename)
                 .map(existingFile -> {
-                    existingFile.setFilename(fileToUpdate.filename());
-                    existingFile.setFolder(fileToUpdate.folder());
-                    existingFile.setSize(fileToUpdate.size());
+                    if(fileToUpdate.filename() != null){existingFile.setFilename(fileToUpdate.filename());}
+                        if(fileToUpdate.folder() != null){existingFile.setFolder(fileToUpdate.folder());}
+                            if(fileToUpdate.size() != null){existingFile.setSize(fileToUpdate.size());}
                     fileRepository.save(existingFile);
                     return ResponseEntity.ok(mapFileToDto(existingFile));
                 }).orElse(ResponseEntity.notFound().build());
