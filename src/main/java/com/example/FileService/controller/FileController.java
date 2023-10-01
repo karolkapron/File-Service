@@ -35,6 +35,10 @@ public class FileController {
     public ResponseEntity<?> deleteByFilename(@PathVariable String filename) {
         return fileService.deleteByFilename(filename);
     }
+    @PutMapping("/{filename}")
+    public ResponseEntity<?> updateByFilename(@PathVariable String filename, @RequestBody File file, Folder folder){
+        return fileService.updateExistingFile(filename, file, folder);
+    }
     //TODO: Add put mapping
 
 }

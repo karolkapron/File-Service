@@ -2,6 +2,7 @@ package com.example.FileService.controller;
 
 import com.example.FileService.model.Folder;
 import com.example.FileService.service.FolderService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,8 @@ public class FolderController {
         return folderService.findByName(name);
     }
 
+
+    @Transactional
     @DeleteMapping("/{name}")
     public ResponseEntity<?> deleteByName(@PathVariable String name) {
         return folderService.deleteByName(name);

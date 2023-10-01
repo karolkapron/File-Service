@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
     Optional<Folder> findByName(String folderName);
-    default void deleteByName(String name) {
-        findByName(name).ifPresent(this::delete);
-    }
+     void deleteByName(String folderName);
+
 }

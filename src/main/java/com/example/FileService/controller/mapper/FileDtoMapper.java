@@ -14,7 +14,7 @@ public class FileDtoMapper {
     public static FileDto mapFileToDto(File file){
         return new FileDto(file.getFilename(), file.getSize(), file.getFolder());
     }
-    public static File mapDtoToFile(FileDto fileDto){
-        return new File(fileDto.filename(), fileDto.size(), fileDto.folder());
-    }
+//    public static File mapDtoToFile(FileDto fileDto){
+//        return new File(fileDto.filename(), fileDto.size(), fileDto.folder());
+//    }
 }
