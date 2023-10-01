@@ -9,19 +9,14 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+
     private String filename;
-    private Long size;
 
-    @ManyToMany
-    @JoinTable(
-            name = "file_folder",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "folder_id")
-    )
-    private List<Folder> folders = new ArrayList<>();
+    private long size;
 
-    File(){}
+    @ManyToOne
+    private Folder folder;
+
 
     public Long getId() {
         return id;
@@ -39,18 +34,19 @@ public class File {
         this.filename = filename;
     }
 
-    public Long getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(Long size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
-    public List<Folder> getFolder() {
-        return folders;
+    public Folder getFolder() {
+        return folder;
     }
-    public void setFolder(List<Folder> folders) {
-        this.folders = folders;
+
+    public void setFolder(Folder folder) {
+        this.folder = folder;
     }
 }
