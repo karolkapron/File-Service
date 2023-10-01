@@ -10,11 +10,12 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String filename;
 
     private long size;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Folder folder;
 
 

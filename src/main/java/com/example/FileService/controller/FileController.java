@@ -3,6 +3,7 @@ package com.example.FileService.controller;
 import com.example.FileService.model.File;
 import com.example.FileService.model.Folder;
 import com.example.FileService.service.FileService;
+import com.example.FileService.service.FolderService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,30 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+    @Autowired
+            private final FolderService folderService;
 
-    FileController(FileService fileService){
+    FileController(FileService fileService, FolderService folderService){
         this.fileService = fileService;
+        this.folderService = folderService;
     }
     @PostMapping
-    public ResponseEntity<File> createFile(@RequestBody File file) {
-        return new ResponseEntity<>(fileService.createFile(file), HttpStatus.CREATED);
+    public ResponseEntity<?> createFile(@RequestBody File file, Folder folder) {
+        System.out.println(folder.getName());
+        if (file.getFilename() == null || file.getFilename().isEmpty()) {
+            return ResponseEntity.badRequest().body(null); // Return bad request if filename is not provided
+        }
+
+        if (folder.getName() != null && !folder.getName().isEmpty()) {
+            Optional<Folder> optionalFolder = folderService.getFolderByName(folder.getName()); // Fetch folder by name
+            if (optionalFolder.isEmpty()) {
+                return ResponseEntity.notFound().build(); // If folder with the given name is not found
+            }
+            file.setFolder(folder); // Associate the file with the folder
+        }
+
+        File savedFile = fileService.createFile(file);
+        return new ResponseEntity<>(savedFile, HttpStatus.CREATED);
     }
 
     @GetMapping

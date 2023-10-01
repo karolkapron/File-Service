@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Service
 public class FolderService {
-    // Assuming you have a FolderRepository
     @Autowired
     private FolderRepository folderRepository;
 
@@ -19,8 +18,10 @@ public class FolderService {
         if(folderRepository.findByName(folder.getName()).isEmpty()) {
             return folderRepository.save(folder);
         }
-            throw new InternalError("Folder exist wit that name");
+        throw new InternalError("Folder exist wit that name");
     }
+
+
 
     public List<Folder> getAllFolders() {
         return folderRepository.findAll();
