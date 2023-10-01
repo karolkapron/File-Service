@@ -6,39 +6,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FolderService {
+    // Assuming you have a FolderRepository
     @Autowired
-    private final FolderRepository folderRepository;
+    private FolderRepository folderRepository;
 
-    public FolderService(FolderRepository folderRepository){
-        this.folderRepository = folderRepository;
-    }
     public Folder createFolder(Folder folder) {
-        Optional<Folder> existingFolder = folderRepository.findByName(folder.getName());
-        if (existingFolder.isPresent()) {
-            throw new IllegalArgumentException("A folder with this name already exists.");
+        if(folderRepository.findByName(folder.getName()).isEmpty()) {
+            return folderRepository.save(folder);
         }
-        return folderRepository.save(folder);
+            throw new InternalError("Folder exist wit that name");
     }
 
-    public Set<Folder> getAllFolders() {
-        return folderRepository.findAll().stream()
-                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Folder::getName))));
+    public List<Folder> getAllFolders() {
+        return folderRepository.findAll();
     }
 
-    public ResponseEntity<Folder> findByName(String name) {
-        return folderRepository.findByName(name)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Optional<Folder> getFolderByName(String name) {
+        return folderRepository.findByName(name);
     }
 
-    public ResponseEntity<?> deleteByName(String name) {
-        folderRepository.deleteByName(name);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> updateFolder(String name, Folder folder) {
+            folderRepository.findByName(name)
+                    .map(existFolder -> {
+                        existFolder.setName(folder.getName());
+                        existFolder.setSubFolders(folder.getSubFolders());
+                        folderRepository.save(existFolder);
+                        return ResponseEntity.ok().build();
+                    });
+            return ResponseEntity.notFound().build();
+    }
+
+    public void removeSubfolderReferences(Folder folder) {
+        List<Folder> referencingFolders = folderRepository.findBySubFoldersContaining(folder);
+        for (Folder referencingFolder : referencingFolders) {
+            referencingFolder.getSubFolders().remove(folder);
+            folderRepository.save(referencingFolder);
+        }
+    }
+
+    public void deleteFolder(String name) {
+        Folder folder = folderRepository.findByName(name).orElseThrow(() -> new RuntimeException("Folder not found"));
+        removeSubfolderReferences(folder);
+        folderRepository.delete(folder);
     }
 }
-

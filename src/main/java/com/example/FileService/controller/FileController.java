@@ -5,40 +5,49 @@ import com.example.FileService.model.Folder;
 import com.example.FileService.service.FileService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/files")
 public class FileController {
+
     @Autowired
     private FileService fileService;
 
+    FileController(FileService fileService){
+        this.fileService = fileService;
+    }
     @PostMapping
-    public File createOrUpdateFile(@RequestBody File file, Folder folder) {
-        return fileService.saveFileWithFolder(file, folder);
+    public ResponseEntity<File> createFile(@RequestBody File file) {
+        return new ResponseEntity<>(fileService.createFile(file), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<File> getAllFiles(){
-        return fileService.getAllFilesDto();
+    public ResponseEntity<List<File>> getAllFiles() {
+        return new ResponseEntity<>(fileService.getAllFiles(), HttpStatus.OK);
     }
+
     @GetMapping("/{filename}")
-    public ResponseEntity<File> findByFilename(@PathVariable String filename) {
-        return fileService.findByFilename(filename);
+    public Optional<File> getFileByFilename(@PathVariable String filename) {
+        return  fileService.getFileByFilename(filename);
     }
 
-    @Transactional
-    @DeleteMapping("/{filename}")
-    public ResponseEntity<?> deleteByFilename(@PathVariable String filename) {
-        return fileService.deleteByFilename(filename);
-    }
+
     @PutMapping("/{filename}")
-    public ResponseEntity<?> updateByFilename(@PathVariable String filename, @RequestBody File file, Folder folder){
-        return fileService.updateExistingFile(filename, file, folder);
+    public ResponseEntity<?> updateFile(@PathVariable String filename, @RequestBody File file) {
+        return fileService.updateFile(filename, file);
     }
-    //TODO: Add put mapping
 
+    @DeleteMapping("/{filename}")
+    public ResponseEntity<Void> deleteFile(@PathVariable String filename) {
+        fileService.deleteFile(filename);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
+
+

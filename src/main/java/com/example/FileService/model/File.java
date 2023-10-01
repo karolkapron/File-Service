@@ -13,14 +13,14 @@ public class File {
     private String filename;
     private Long size;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany
+    @JoinTable(
+            name = "file_folder",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "folder_id")
+    )
     private List<Folder> folders = new ArrayList<>();
 
-    public File(String filename, Long sizeInByte, List<Folder> folders){
-        this.filename = filename;
-        this.size = sizeInByte;
-        this.folders = folders;
-    }
     File(){}
 
     public Long getId() {
