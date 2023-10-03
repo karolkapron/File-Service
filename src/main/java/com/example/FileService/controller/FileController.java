@@ -30,15 +30,15 @@ public class FileController {
     @PostMapping
     public ResponseEntity<?> createFile(@RequestBody File file, Folder folder) {
         if (file.getFilename() == null || file.getFilename().isEmpty()) {
-            return ResponseEntity.badRequest().body(null); // Return bad request if filename is not provided
+            return ResponseEntity.badRequest().body(null);
         }
 
         if (folder.getName() != null && !folder.getName().isEmpty()) {
-            Optional<Folder> optionalFolder = folderService.getFolderByName(folder.getName()); // Fetch folder by name
+            Optional<Folder> optionalFolder = folderService.getFolderByName(folder.getName());
             if (optionalFolder.isEmpty()) {
-                return ResponseEntity.notFound().build(); // If folder with the given name is not found
+                return ResponseEntity.notFound().build();
             }
-            file.setFolder(folder); // Associate the file with the folder
+            file.setFolder(folder);
         }
 
         File savedFile = fileService.createFile(file);

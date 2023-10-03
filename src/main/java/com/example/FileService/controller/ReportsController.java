@@ -20,7 +20,7 @@ public class ReportsController {
     @Autowired
     private ReportService reportService;
 
-    @GetMapping("/total-stats")
+    @GetMapping("/file-report")
     public FileReportDto getTotalStats() {
         return reportService.getTotalStats();
     }
