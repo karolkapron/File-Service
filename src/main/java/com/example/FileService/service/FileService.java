@@ -1,7 +1,9 @@
 package com.example.FileService.service;
 
 import com.example.FileService.model.File;
+import com.example.FileService.model.Folder;
 import com.example.FileService.repository.FileRepository;
+import com.example.FileService.repository.FolderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class FileService {
 
     @Autowired
     private FileRepository fileRepository;
+
+    @Autowired
+    private FolderRepository folderRepository;
 
 
     public File createFile(File file) {
@@ -30,15 +35,21 @@ public class FileService {
     }
 
     public ResponseEntity<?> updateFile(String filename, File file) {
-            fileRepository.findByFilename(filename)
-                    .map(existingFile -> {
-                        existingFile.setFilename(file.getFilename());
-                        existingFile.setSize(file.getSize());
-                        existingFile.setFolder(file.getFolder());
-                        fileRepository.save(existingFile);
-                        return ResponseEntity.ok().build();
-                    });
-        return ResponseEntity.notFound().build();
+        Optional<File> optionalFile = fileRepository.findByFilename(filename);
+        File existFile;
+        if (optionalFile.isEmpty()) {
+            throw new IllegalArgumentException("Plik o podanym filename nie istnieje.");
+        }else{
+            existFile = optionalFile.get();
+        }
+        Optional<Folder> optionalFolder = folderRepository.findByName(file.getFolder().getName());
+        if (optionalFolder.isPresent()) {
+            existFile.setFolder(optionalFolder.get());
+            fileRepository.save(existFile);
+        } else {
+            throw new IllegalArgumentException("Folder o podanej nazwie nie istnieje.");
+        }
+        return ResponseEntity.ok().build();
     }
 
     public void deleteFile(String filename) {

@@ -14,9 +14,6 @@ public class Folder {
     @Column(unique = true)
     private String name;
 
-//    @OneToMany(mappedBy = "folder")
-//    private List<File> files;
-
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id")

@@ -26,9 +26,9 @@ public class FileController {
         this.fileService = fileService;
         this.folderService = folderService;
     }
+    //Dodawanie file z folder tylko i wylacznie jak nie ma folderu w bazie, naprawic posta
     @PostMapping
     public ResponseEntity<?> createFile(@RequestBody File file, Folder folder) {
-        System.out.println(folder.getName());
         if (file.getFilename() == null || file.getFilename().isEmpty()) {
             return ResponseEntity.badRequest().body(null); // Return bad request if filename is not provided
         }
