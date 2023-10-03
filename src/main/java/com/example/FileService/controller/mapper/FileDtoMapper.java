@@ -5,16 +5,16 @@ import com.example.FileService.model.dto.FileDto;
 
 import java.util.List;
 
-public class FileDtoMapper {
-    public static List<FileDto> mapFilesToFilesDto(List<File> files){
-        return files.stream()
-                .map(FileDtoMapper::mapFileToDto)
-                .toList();
-    }
-    public static FileDto mapFileToDto(File file){
-        return new FileDto(file.getFilename(), file.getSize(), file.getFolder());
-    }
+//public class FileDtoMapper {
+//    public static List<FileDto> mapFilesToFilesDto(List<File> files){
+//        return files.stream()
+//                .map(FileDtoMapper::mapFileToDto)
+//                .toList();
+//    }
+//    public static FileDto mapFileToDto(File file){
+//        return new FileDto(file.getFilename(), file.getSize(), file.getFolder());
+//    }
 //    public static File mapDtoToFile(FileDto fileDto){
 //        return new File(fileDto.filename(), fileDto.size(), fileDto.folder());
 //    }
-}
+

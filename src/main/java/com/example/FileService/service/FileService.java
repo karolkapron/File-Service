@@ -34,7 +34,7 @@ public class FileService {
                     .map(existingFile -> {
                         existingFile.setFilename(file.getFilename());
                         existingFile.setSize(file.getSize());
-                        existingFile.setFolder(file.getFolder());
+                        existingFile.setFolders(file.getFolders());
                         fileRepository.save(existingFile);
                         return ResponseEntity.ok().build();
                     });

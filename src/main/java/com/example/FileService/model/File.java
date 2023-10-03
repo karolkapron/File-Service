@@ -1,10 +1,14 @@
 package com.example.FileService.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
 @Entity
+@Getter
+@Setter
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,34 +27,4 @@ public class File {
 
     File(){}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public Long getSize() {
-        return size;
-    }
-
-    public void setSize(Long size) {
-        this.size = size;
-    }
-
-    public List<Folder> getFolder() {
-        return folders;
-    }
-    public void setFolder(List<Folder> folders) {
-        this.folders = folders;
-    }
 }
